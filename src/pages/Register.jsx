@@ -106,7 +106,7 @@ const Register = () => {
         <ErrorMessage name="email"  component="div" className="text-red-600 text-sm" />
           
         <label htmlFor="password">Password</label>
-        <Field name="password" type="text"  placeholder="Enter the password"  className="border-black w-full border rounded-md px-2 py-2"/>
+        <Field name="password" type="password"  placeholder="Enter the password"  className="border-black w-full border rounded-md px-2 py-2"/>
         <ErrorMessage name="password" component="div" className="text-red-600 text-sm" />
           
         <ToastContainer />

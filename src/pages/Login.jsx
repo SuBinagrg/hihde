@@ -1,16 +1,23 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import * as Yup from "yup";
+import { Authcontext } from "../context/Authcontext";
 
 const Login = () => {
+  const {login} = useContext(Authcontext)
+ 
   const postFormData = async (values) => {
     try {
-      await axios.post("https://blog-hqx2.onrender.com/user/login", values);
-      toast.success("Login Successfully");
+      const response = await axios.post("https://blog-hqx2.onrender.com/user/login", values);
+    
+      
+      const token = response.data.token
+      const user = response.data.user
+      toast.success("Login Successfull");
     } catch (error) {
-      toast.error("Login Unsuccessfully");
+      toast.error("Login Unsuccessfull");
       console.log(error);
     }
   };
@@ -29,7 +36,7 @@ const Login = () => {
         postFormData(values);
       }}
     >
-      <Form className="flex flex-col gap-y-5 w-96 mt-25  mx-auto border-black p-6 rounded  shadow-xl/30">
+      <Form className="flex flex-col gap-y-5 w-96 mt-25  mx-auto border-black p-6 rounded-2xl shadow-lg shadow-pink-800/90">
       <h1 className="text-center text-3xl">Welcome Back!</h1>
         <label htmlFor="email">Email</label>
         <Field
@@ -47,7 +54,7 @@ const Login = () => {
         <label htmlFor="password">Password</label>
         <Field
           name="password"
-          type="text"
+          type="password"
           placeholder="Enter the password"
           className="border-black w-full border rounded-md px-2 py-2"
         />
