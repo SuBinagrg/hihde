@@ -32,18 +32,15 @@
 //         email: "",
 //         password: "",
 //       }}
-//       validationSchema={Yup.object({
-//         name: Yup.string()
-//           .min(3, "minimum 3 character")
-//           .required("Username is required"),
+//       validationSchema={Yup.object({name: Yup.string().min(3, "minimum 3 character").required("Username is required"),
 //         email: Yup.string().email().required("Email is reqired"),
-//         password: Yup.string()
-//           .min(8, "minimum character")
-//           .max(15, "maximum character")
-//           .required("password is required"),
-//       })}
-//       onsubmit={(values) => {}}
-//     >
+//         password: Yup.string().min(8, "minimum character").max(15, "maximum character") .required("password is required"),
+//           })}
+//           
+//          
+//       
+//       onsubmit={(values) => {}} >
+//    
 //       <Form>
 //         {fieldHandling.map((value, index) => {
 //           return (

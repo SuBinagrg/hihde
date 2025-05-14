@@ -2,11 +2,15 @@ import { Field, Form, Formik } from "formik"
 import { useContext, useState } from "react";
 import { Authcontext } from "../context/Authcontext";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 
-const Createblog = () => {
+const EditBlog = () => {
     const [image,setImage] = useState(null);
+    const location = useLocation();
+    const {id} = useParams();
+
+    console.log(location)
         const navigate = useNavigate();
 
       const {user} = useContext(Authcontext);
@@ -19,6 +23,8 @@ const Createblog = () => {
     }
 
     const handleSubmit = async(values)=>{
+
+      console.log(values);
         console.log(values,image,user);
         const formData = new FormData();
            formData.append("title",values?.title)
@@ -28,7 +34,7 @@ const Createblog = () => {
            formData.append("author",user?._id);
 
           try {
-               await axios.post("https://blog-hqx2.onrender.com/blog/create",formData)
+               await axios.put(`https://blog-hqx2.onrender.com/blog/${id}`,formData)
                 navigate("/");
           } catch (error) {
             console.log(error)
@@ -39,8 +45,9 @@ const Createblog = () => {
     <div className="mt-10 ml-10">
         <Formik
           initialValues={{
-             title:"",
-             content:"",
+             title:location.state.blog.title,
+
+             content:location.state.blog.content
           }}
           onSubmit={(values)=>{
             handleSubmit(values);
@@ -55,7 +62,8 @@ const Createblog = () => {
                 <div className="mt-4">
                     <label htmlFor="Image">Upload blog image</label> <br />
                       <input type="file" name="image" onChange={(event)=>handleImageChange(event)} className="border bg-amber-300" />
-                </div> 
+                </div>
+
                 <button type="submit" className="p-2 bg-blue-500 rounded-lg text-white mt-10 cursor-pointer">Submit blog</button>
             </Form>
 
@@ -68,4 +76,4 @@ const Createblog = () => {
   )
 }
 
-export default Createblog
+export default EditBlog

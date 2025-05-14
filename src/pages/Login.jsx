@@ -1,83 +1,48 @@
-import axios from "axios";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useContext } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import * as Yup from "yup";
-import { Authcontext } from "../context/Authcontext";
+import { ErrorMessage, Field, Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import React, { useContext } from 'react'
+import axios from 'axios'
+import { Authcontext } from '../context/Authcontext'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+  //import the login function from authcontext
   const {login} = useContext(Authcontext)
- 
-  const postFormData = async (values) => {
+ const navigate = useNavigate()
+  const loginUser = async (values) => {
     try {
-      const response = await axios.post("https://blog-hqx2.onrender.com/user/login", values);
-    
-      
+      const response = await axios.post("https://blog-hqx2.onrender.com/user/login", values)
+
+      //take the token and user data from the response and send it to login function
       const token = response.data.token
       const user = response.data.user
-      toast.success("Login Successfull");
+      login(token, user)
+      navigate("/")
+      
     } catch (error) {
-      toast.error("Login Unsuccessfull");
-      console.log(error);
+      console.log(error)
     }
-  };
-  return (
-    <Formik
-      initialValues={{
-        email: "",
-        password: "",
-      }}
-      validationSchema={Yup.object({
-        email: Yup.string().email().required("Email name is required"),
-        password: Yup.string().min(6, "Atleast 6 charcters").required("password is required"),
-          
-      })}
-      onSubmit={(values) => {
-        postFormData(values);
-      }}
-    >
-      <Form className="flex flex-col gap-y-5 w-96 mt-25  mx-auto border-black p-6 rounded-2xl shadow-lg shadow-pink-800/90">
-      <h1 className="text-center text-3xl">Welcome Back!</h1>
-        <label htmlFor="email">Email</label>
-        <Field
-          name="email"
-          type="email"
-          placeholder="Enter your Email"
-          className="border-black w-full border rounded-md px-2 py-2"
-        />
-        <ErrorMessage
-          name="email"
-          component="div"
-          className="text-red-600 text-sm"
-        />
+  }
 
-        <label htmlFor="password">Password</label>
-        <Field
-          name="password"
-          type="password"
-          placeholder="Enter the password"
-          className="border-black w-full border rounded-md px-2 py-2"
-        />
-        <ErrorMessage
-          name="password"
-          component="div"
-          className="text-red-600 text-sm"
-        />
-        <ToastContainer />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white  rounded-md px-2 py-1  w-full mx-auto  h-12  hover:bg-red-600"
-        >
-          Log in
-        </button>
-        
-        <div className='flex text-sm  px-8'>
-          <p >Don't have an account yet?</p>
-          <button type="submit" className='text-blue-500  font-bold cursor-pointer'>Sign up here</button>
-          </div>
+  return (
+    <Formik initialValues={{email: '', password: ''}} 
+    validationSchema={Yup.object({
+      email: Yup.string().email().required("This field is required."),
+      password: Yup.string().required("Password is required.")
+    })}
+    onSubmit={(values)=>{
+      loginUser(values)
+    }}
+    >
+      <Form className='flex flex-col'>
+        <Field name="email" className="border"/>
+        <ErrorMessage name="email"/>
+        <Field name="password" type="password" className="border"/>
+        <ErrorMessage name="password"/>
+        <button type="submit">Submit</button>
       </Form>
     </Formik>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
